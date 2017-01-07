@@ -46,7 +46,7 @@ void addafter(int num, int loc) {
   int i;
   struct node * temp, * left, * right;
   right = head;
-  for (i = 1; i < loc; i++) {
+  for (i = 0; i < loc; i++) {
     left = right;
     right = right -> next;
   }
@@ -57,6 +57,24 @@ void addafter(int num, int loc) {
   left -> next = right;
   return;
 }
+
+void addbefore(int num, int loc) {
+  int i;
+  struct node * temp, * left, * right;
+  right = head;
+  for (i = 1 ; i < loc; i++) {
+    left = right;
+    right = right -> next;
+  }
+  temp = (struct node * ) malloc(sizeof(struct node));
+  temp -> data = num;
+  left -> next = temp;
+  left = temp;
+  left -> next = right;
+  return;
+}
+
+
 
 int ddelete(int num) {
   struct node * temp, * prev;
@@ -130,10 +148,39 @@ void display(struct node * r) {
   return;
 }
 
+
+void deletenum(int num) {
+  struct node * temp, * prev;
+  temp = head;
+  while (temp != NULL) {
+    if (temp -> data == num) {
+      if (temp == head) {
+        head = temp -> next;
+        free(temp);
+        temp = prev -> next;
+      } else {
+        prev -> next = temp -> next;
+        free(temp);
+        temp = prev -> next;
+      }
+    } 
+	  else {
+      prev = temp;
+      temp = prev -> next;
+    }
+  }
+}
+
 int main() {
-  int i, num;
+  int i, num, loc;
   struct node * n;
   head = NULL;
+  insert(1);
+  insert(4);
+  insert(3);
+  insert(4);
+  insert(4);
+  
   while (1) {
     printf("Linked List Operations\n");
     printf("===============\n");
@@ -142,7 +189,10 @@ int main() {
     printf("3.Size\n");
     printf("4.Delete\n");
     printf("5.Search\n");
-    printf("6.Exit\n");
+    printf("6.Add After\n");
+    printf("7.Add Before\n");
+    printf("8.Delete All\n");
+    printf("9.Exit\n");
     printf("Enter your choice : ");
     if (scanf("%d", & i) <= 0) {
       printf("Enter only an Integer\n");
@@ -187,7 +237,37 @@ int main() {
       		search(num);
 		  }
 		break;
-      case 6:
+	  case 6:
+	  	if (head==NULL)
+	  		printf("List is Empty\n");
+	  	else{
+	  		printf("Enter value: ");
+	  		scanf("%d", &num);
+	  		printf("Enter location: ");
+	  		scanf("%d", &loc);
+	  		addafter(num, loc);
+		  }
+		break;
+	  case 7:
+	  	if (head==NULL)
+	  		printf("List is Empty\n");
+	  	else{
+	  		printf("Enter value: ");
+	  		scanf("%d", &num);
+	  		printf("Enter location: ");
+	  		scanf("%d", &loc);
+	  		addbefore(num, loc);
+		  }
+		break;
+      case 8:
+      	if (head==NULL)
+	  		printf("List is Empty\n");
+	    else{
+	    	printf("Enter value to delete: ");
+	    	scanf("%d", &num);
+	    	deletenum(num);
+		}break;
+      case 9:
         return 0;
       default:
         printf("Invalid option\n");
